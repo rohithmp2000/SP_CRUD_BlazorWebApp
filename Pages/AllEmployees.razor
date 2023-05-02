@@ -1,0 +1,41 @@
+﻿@page "/allemployees"
+@using SP_CRUD.Data
+@inject EmployeeServices EmployeeServices
+
+<h3>List of all Employees</h3>
+<hr />
+<div>
+    <a href="/addemployee" class="btn btn-primary">Add Employee</a>
+</div>
+<br />
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Emp Id</th>
+            <th>Name</th>
+            <th>Designation</th>
+            <th>Salary</th>
+            <th colspan="2"><div class="text-center">Actions</div></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in emplist)
+        {
+            <tr>
+                <td>@i.emp_id</td>
+                <td>@i.emp_name</td>
+                <td>@i.emp_designation</td>
+                <td>@i.emp_salary</td>
+                <td><div class="text-center"><a href="/editemployee/@i.emp_id" class="btn btn-warning"><span class="oi oi-pencil"></span>   Edit</a></div></td>
+                <td><div class="text-center"><a href="/deleteemployee/@i.emp_id" class="btn btn-danger"><span class="oi oi-trash"></span>   Delete</a></div></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    EmpModel[] emplist;
+    protected override void OnInitialized() => emplist = EmployeeServices.ReadAllEmp();
+}

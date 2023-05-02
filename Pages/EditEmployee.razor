@@ -1,0 +1,58 @@
+﻿@page "/editemployee/{id}"
+@using SP_CRUD.Data
+@inject EmployeeServices employeeservice
+@inject NavigationManager NavigationManager
+
+<h3>Edit Employee</h3>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="name" class="control-label">Name</label>
+                <input form="name" class="form-control" @bind=@empobj.emp_name />
+            </div>
+            <div class="form-group">
+                <label for="designation" class="control-label">Designation</label>
+                <input form="designation" class="form-control" @bind=@empobj.emp_designation />
+            </div>
+            <div class="form-group">
+                <label for="salary" class="control-label">Salary</label>
+                <input form="salary" class="form-control" @bind=@empobj.emp_salary />
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-success" onclick="@update" value="Save Changes" />
+                <input type="button" class="btn btn-danger" onclick="@cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    [Parameter]
+    public string id{ get; set; }
+    EmpModel empobj = new EmpModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        empobj = await Task.Run(() => employeeservice.Readbyid(Convert.ToInt32(id)));
+    }
+
+    protected void update()
+    {
+        employeeservice.UpdateEmp(empobj);
+        NavigationManager.NavigateTo("allemployees");
+    }
+
+    void cancel()
+    {
+        NavigationManager.NavigateTo("allemployees");
+    }
+}
+ 

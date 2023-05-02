@@ -1,0 +1,65 @@
+﻿@page "/deleteemployee/{id}"
+@using SP_CRUD.Data
+@inject EmployeeServices employeeService
+@inject NavigationManager NavigationManager
+
+<h3>DeleteEmployee</h3>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="id" class="control-label">Name</label>
+                <input type="text" form="id" class="form-control" @bind=@empobj.emp_id readonly />
+            </div>
+            <div class="form-group">
+                <label for="name" class="control-label">Name</label>
+                <input type="text" form="name" class="form-control" @bind=@empobj.emp_name readonly />
+            </div>
+            <div class="form-group">
+                <label for="designation" class="control-label">Designation</label>
+                <input type="text" form="designation" class="form-control" @bind=@empobj.emp_designation readonly />
+            </div>
+            <div class="form-group">
+                <label for="salary" class="control-label">Salary</label>
+                <input type="text" form="salary" class="form-control" @bind=@empobj.emp_salary readonly />
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-success" onclick="@deleteemp" value="Delete" />
+                <input type="button" class="btn btn-danger" onclick="@cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    EmpModel empobj = new EmpModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        empobj = await Task.Run(() => employeeService.Readbyid(Convert.ToInt32(id)));
+    }
+
+    protected void deleteemp()
+    {
+        
+        employeeService.DeleteEmp(empobj);
+        NavigationManager.NavigateTo("allemployees");
+    }
+
+    void cancel()
+    {
+        NavigationManager.NavigateTo("allemployees");
+    }
+
+}
